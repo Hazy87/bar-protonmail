@@ -10,8 +10,9 @@ class Printer:
 
 
 class WaybarPrinter(Printer):
-    def __init__(self, badge: str):
+    def __init__(self, badge: str, hide_if_empty: bool):
         self.badge = badge
+        self.hide_if_empty = hide_if_empty
 
     def print(self, count, inaccurate=False):
         classes = set()
@@ -21,6 +22,9 @@ class WaybarPrinter(Printer):
         if count > 0:
             classes.add('unread')
             text = str(count)
+        if count == 0 and self.hide_if_empty:
+            self._print(text)
+            return
         text = f'{self.badge} {text}'.strip()
         text = json.dumps({'text': f'{text}', 'class': list(classes)})
         self._print(text)
@@ -31,9 +35,10 @@ class WaybarPrinter(Printer):
 
 
 class PolybarPrinter(Printer):
-    def __init__(self, badge: str, color: str = None):
+    def __init__(self, badge: str, hide_if_empty: bool, color: str = None, ):
         self.badge = badge
         self.color = color
+        self.hide_if_empty = hide_if_empty
 
     def print(self, count, inaccurate=False):
         text = str(count) if count > 0 else ''

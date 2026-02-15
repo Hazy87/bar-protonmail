@@ -28,6 +28,8 @@ def cli():
                         help='Protocol and URL of the proxy (e.g. "https socks5://user:password@host:port").')
     parser.add_argument('-sm', '--spam', action='store_true',
                         help='Enable new spam email notifications.')
+    parser.add_argument('-hi', '--hide-if-empty', action='store_true',
+                        help='Hides the icon if no mail.')
     args = parser.parse_args()
 
     if args.color is not None and args.format != 'polybar':
@@ -49,9 +51,9 @@ def cli():
         sys.exit()
 
     if args.format == 'waybar':
-        printer = WaybarPrinter(badge=args.badge)
+        printer = WaybarPrinter(badge=args.badge, hide_if_empty=args.hide_if_empty)
     elif args.format == 'polybar':
-        printer = PolybarPrinter(badge=args.badge, color=args.color)
+        printer = PolybarPrinter(badge=args.badge, color=args.color, hide_if_empty=args.hide_if_empty)
 
     if not session_path.is_file():
         printer.error('Authentication required')
