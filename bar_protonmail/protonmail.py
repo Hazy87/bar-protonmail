@@ -25,7 +25,7 @@ class ProtonMail:
                 dump=session_dump,
                 log_dir_path=self.cache_dir,
                 cache_dir_path=self.cache_dir,
-                tls_pinning=not self.proxies,
+                tls_pinning=False,
                 proxies=self.proxies
             )
             self._session.enable_alternative_routing = True
@@ -36,7 +36,7 @@ class ProtonMail:
             api_url='https://mail-api.proton.me',
             log_dir_path=self.cache_dir,
             cache_dir_path=self.cache_dir,
-            tls_pinning=not self.proxies,
+            TLSPinning=False,
             proxies=self.proxies
         )
         session.enable_alternative_routing = True
@@ -55,6 +55,7 @@ class ProtonMail:
     def get_unread(self):
         resp = self.session.api_request('/api/mail/v4/messages/count')
         inbox = next(c for c in resp['Counts'] if c['LabelID'] == '0')
+
         return inbox['Unread']
 
     def get_latest_event(self):
